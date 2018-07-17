@@ -310,15 +310,12 @@
         <div class="container">
             {% for pet in pets %}
               <div class="mix {{pet.species}}" data-petname="{{pet.name}}" data-petage="{{pet.age}}">
-                <div class="title">{{pet.name}}</div>
-                {%comment%}
                 <h3>{{pet.name}}</h3>
                 <p>{{pet.species}}</p>
                 {% if pet.breed %}
                   <p>Breed: {{pet.breed}}</p>
                   <p>{{pet.age}}</p>
                 {% endif %}
-              {%endcomment%}
               </div>
             {% endfor%}
           </div>
