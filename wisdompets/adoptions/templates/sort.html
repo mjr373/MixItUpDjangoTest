@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link href="reset.css" rel="stylesheet"/>
+        <!-- <link href="style2.css" rel="stylesheet"/> -->
+
+        <style>
+            html,
+            body {
+                height: 100%;
+                background: #f2f2f2;
+            }
+
+            *,
+            *:before,
+            *:after {
+                box-sizing: border-box;
+            }
+
+            /* Controls
+            ---------------------------------------------------------------------- */
+
+            .controls {
+                padding: 1rem;
+                background: #333;
+                font-size: 0.1px;
+            }
+
+            .control {
+                position: relative;
+                display: inline-block;
+                width: 2.7rem;
+                height: 2.7rem;
+                background: #444;
+                cursor: pointer;
+                font-size: 15px;
+                color: white;
+                transition: background 150ms;
+            }
+
+            .control:hover {
+                background: #3f3f3f;
+            }
+
+            .control[data-filter]:after,
+            .control[data-toggle]:after {
+                content: '';
+                position: absolute;
+                width: 10px;
+                height: 10px;
+                top: calc(50% - 6px);
+                left: calc(50% - 6px);
+                border: 2px solid currentColor;
+                border-radius: 2px;
+                background: currentColor;
+                transition: background-color 150ms, border-color 150ms;
+            }
+
+            /**/
+            .control[data-sort]:after {
+                content: '';
+                position: absolute;
+                width: 10px;
+                height: 10px;
+                border-top: 2px solid;
+                border-left: 2px solid;
+                top: calc(50% - 6px);
+                left: calc(50% - 6px);
+                transform:  translateY(1px) rotate(45deg);
+            }
+
+            .control[data-sort*=":desc"]:after {
+                transform:  translateY(-4px) rotate(-135deg);
+            }
+            /**/
+
+            .mixitup-control-active {
+                background: #393939;
+            }
+
+            .mixitup-control-active[data-toggle]:after {
+                background: transparent;
+            }
+
+            .mixitup-control-active[data-filter]:after {
+                background: transparent;
+            }
+
+            .control:first-of-type {
+                border-radius: 3px 0 0 3px;
+            }
+
+            .control:last-of-type {
+                border-radius: 0 3px 3px 0;
+            }
+
+            .control[data-filter] + .control[data-sort] {
+                margin-left: .75rem;
+            }
+
+            .control[data-filter=".Dog"],
+            .control[data-toggle=".Dog"] {
+                color: #91e6c7;
+            }
+
+            .control[data-filter=".Cat"],
+            .control[data-toggle=".Cat"] {
+                color: #5ecdde;
+            }
+
+            .control[data-filter=".Rabbit"],
+            .control[data-toggle=".Rabbit"] {
+                color: #d595aa;
+            }
+
+            .control[data-filter=".Hedgehog"],
+            .control[data-toggle=".Hedgehog"] {
+                color: #fcccff;
+            }
+
+            /* Container
+            ---------------------------------------------------------------------- */
+
+            .container {
+                padding: 1rem;
+                text-align: justify;
+                font-size: 10px;
+            }
+
+            .container:after {
+                content: '';
+                display: inline-block;
+                width: 100%;
+            }
+
+            /* Target Elements
+            ---------------------------------------------------------------------- */
+
+            .mix,
+            .gap {
+                display: inline-block;
+                vertical-align: top;
+            }
+
+            .mix {
+                background: #fff;
+                border-top: .5rem solid currentColor;
+                border-radius: 2px;
+                margin-bottom: 1rem;
+                position: relative;
+            }
+
+            .mix:before {
+                content: '';
+                display: inline-block;
+                padding-top: 56.25%;
+                border-top: .5rem solid transparent;
+            }
+
+            .mix.Dog {
+                color: #91e6c7;
+            }
+
+            .mix.Rabbit {
+                color: #d595aa;
+            }
+
+            .mix.Cat {
+                color: #5ecdde;
+            }
+
+            .mix.Hedgehog {
+                color: #fcccff;
+            }
+
+            /*this is for two color sorting- unnecessary currently*/
+            /* .mix.Rabbit.Dog:before {
+                width: 100%;
+                border-top-color: #91e6c7;
+            }
+
+            .mix.Dog.Cat:before {
+                width: 100%;
+                border-top-color: #91e6c7;
+            }
+
+            .mix.Cat.Rabbit:before {
+                width: 100%;
+                border-top-color: #d595aa;
+            } */
+
+            /* Grid Breakpoints
+            ---------------------------------------------------------------------- */
+
+            /* 2 Columns */
+
+            .mix,
+            .gap {
+                width: calc(100%/2 - (((2 - 1) * 1rem) / 2));
+            }
+
+            button{
+              display: inline-block;
+              padding: .4em .8em;
+              background: #777777;
+              border: 0;
+              color: #ffffff;
+              font-size: 16px;
+              font-weight: 300;
+              border-radius: 4px;
+              cursor: pointer;
+            }
+
+            button:hover {
+              outline: 0 none;
+              background: black;
+            }
+
+            input {
+              padding: .5em;
+            }
+
+            .title {
+              font-weight: 2em;
+            }
+
+            /* 3 Columns */
+
+            @media screen and (min-width: 541px) {
+                .mix,
+                .gap {
+                    width: calc(100%/3 - (((3 - 1) * 1rem) / 3));
+                }
+            }
+
+            /* 4 Columns */
+
+            @media screen and (min-width: 961px) {
+                .mix,
+                .gap {
+                    width: calc(100%/4 - (((4 - 1) * 1rem) / 4));
+                }
+            }
+
+            /* 5 Columns */
+
+            @media screen and (min-width: 1281px) {
+                .mix,
+                .gap {
+                    width: calc(100%/5 - (((5 - 1) * 1rem) / 5));
+                }
+            }
+        </style>
+
+        <title>MixItUp Demo - Toggle Filtering AND Logic</title>
+    </head>
+    <body>
+        <div class="controls">
+
+            <button type="button" data-filter="all">All</button>
+            <button type="button" data-toggle=".Dog">Dog</button>
+            <button type="button" data-toggle=".Cat">Cat</button>
+            <button type="button" data-toggle=".Rabbit">Rabbit</button>
+            <button type="button" data-toggle=".Hedgehog">Hedgehog</button>
+
+            <!-- experimenting with autogenerating buttons- determination: probably not possible directly in template (need new query in model, not worth it)
+            {%comment%}
+            {% for pet in pets %}
+              {% for p in pets %}
+                {% if pet.species != p.species %}
+                {%endcomment%}
+                  <button type="button" data-toggle=".{{pet.species}}">{{pet.species}}</button>
+                {%comment%}
+                {% endif %}
+              {%endfor%}
+
+            {% endfor%}
+            {%endcomment%}-->
+            <input type="text" id="input" placeholder="Type here">
+
+            <br>
+
+            <button type="button" data-sort="petage:asc">Asc by age</button>
+            <button type="button" data-sort="petage:desc">Desc by age</button>
+
+            <button type="button" data-sort="petname:asc">Asc by name</button>
+            <button type="button" data-sort="petname:desc">Desc by name</button>
+
+        </div>
+
+        <!-- taken from Peter Dodds' website- probably will need to be moditfied to be more suited for template (although, as is,
+        doesn't make more pages than it has entries for) -->
+        <div id="stacks_in_525277_page98" class="stacks_in html_stack">
+            <div class="mixitup-page-list " style="text-align:center">
+              <button type="button" class="mixitup-control mixitup-control-prev" data-page="prev">«</button>
+              <button type="button" class="mixitup-control mixitup-control-first mixitup-control-active" data-page="1">1</button>
+              <button type="button" class="mixitup-control" data-page="2">2</button>
+              <button type="button" class="mixitup-control" data-page="3">3</button>
+              <button type="button" class="mixitup-control" data-page="4">4</button>
+              <span class="mixitup-control mixitup-control-truncation-marker">…</span>
+              <button type="button" class="mixitup-control mixitup-control-last" data-page="6">6</button>
+              <button type="button" class="mixitup-control mixitup-control-next" data-page="next">»</button>
+            </div>
+            <div class="mixitup-page-stats" style= "text-align:center" >1 to 12 of 72</div>
+        </div>
+
+        <div class="container">
+            {% for pet in pets %}
+              <div class="mix {{pet.species}}" data-petname="{{pet.name}}" data-petage="{{pet.age}}">
+                <div class="title">{{pet.name}}</div>
+                {%comment%}
+                <h3>{{pet.name}}</h3>
+                <p>{{pet.species}}</p>
+                {% if pet.breed %}
+                  <p>Breed: {{pet.breed}}</p>
+                  <p>{{pet.age}}</p>
+                {% endif %}
+              {%endcomment%}
+              </div>
+            {% endfor%}
+          </div>
+
+            <div class="gap"></div>
+            <div class="gap"></div>
+            <div class="gap"></div>
+        </div>
+
+        <script src="{% static 'mixitup.min.js' %}"></script>
+
+        <script src="{% static 'mixitup-pagination.min.js' %}"></script>
+
+        <script>
+            var containerEl2 = document.querySelector('.container');
+            var mixer = mixitup(containerEl2, {
+                load: {
+                  //this is how it is sorted before anything is selected
+                  sort: 'petname:asc'
+                  // sort: 'published-date:desc name:asc'
+                },
+                pagination: {
+                      limit: 12,
+                      loop: true,
+              	},
+            });
+        </script>
+
+        <!-- this is supposed to go with the search bar -->
+        <!-- <script src="{% static 'search.js' %}"></script> -->
+        <script>
+        $(function() {
+
+          $(".container").mixItUp();
+
+          var inputText;
+          var $matching = $();
+
+          // Delay function
+          var delay = (function(){
+            var timer = 0;
+            return function(callback, ms){
+              clearTimeout (timer);
+              timer = setTimeout(callback, ms);
+            };
+          })();
+
+          $("#input").keyup(function(){
+            // Delay function invoked to make sure user stopped typing
+            delay(function(){
+              inputText = $("#input").val().toLowerCase();
+
+              // Check to see if input field is empty
+              if ((inputText.length) > 0) {
+                $( '.mix').each(function() {
+                  $this = $("this");
+
+                   // add item to be filtered out if input text matches items inside the title
+                   if($(this).children('.title').text().toLowerCase().match(inputText)) {
+                    $matching = $matching.add(this);
+                  }
+                  else {
+                    // removes any previously matched item
+                    $matching = $matching.not(this);
+                  }
+                });
+                $(".container").mixItUp('filter', $matching);
+              }
+
+              else {
+                // resets the filter to show all item if input is empty
+                $(".container").mixItUp('filter', 'all');
+              }
+            }, 200 );
+          });
+        })</script>
+
+
+    </body>
+</html>
