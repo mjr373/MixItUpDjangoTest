@@ -5,7 +5,6 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <link href="reset.css" rel="stylesheet"/>
-        <!-- <link href="style2.css" rel="stylesheet"/> -->
 
         <style>
             html,
@@ -279,7 +278,10 @@
 
             {% endfor%}
             {%endcomment%}-->
-            <input type="text" id="input" placeholder="Type here">
+
+            <!-- <input type="text" id="input" placeholder="Type here"> -->
+            <input type="text" id="myInput" onkeyup="search()" placeholder="Search for names..">
+            <br>
 
             <br>
 
@@ -308,16 +310,18 @@
         </div>
 
         <div class="container">
+          <div id="elementList">
             {% for pet in pets %}
               <div class="mix {{pet.species}}" data-petname="{{pet.name}}" data-petage="{{pet.age}}">
-                <h3>{{pet.name}}</h3>
-                <p>{{pet.species}}</p>
-                {% if pet.breed %}
-                  <p>Breed: {{pet.breed}}</p>
-                  <p>{{pet.age}}</p>
-                {% endif %}
+                <h3><p>{{pet.name}}</p></h3>
+                <!-- <p>{{pet.species}}</p> -->
+              {%comment%}  {% if pet.breed %}
+                  <!-- <p>Breed: {{pet.breed}}</p>
+                  <p>{{pet.age}}</p> -->
+                {% endif %}{%endcomment%}
               </div>
             {% endfor%}
+          </div>
           </div>
 
             <div class="gap"></div>
@@ -343,55 +347,40 @@
               	},
             });
         </script>
-
-        <!-- this is supposed to go with the search bar -->
-        <!-- <script src="{% static 'search.js' %}"></script> -->
         <script>
-        $(function() {
+        function search() {
+          //mixitup
+          // var containerEl = document.querySelector('[data-ref~="mixitup-container"]');
+          // var mixer = mixitup(containerEl, {
+          //     selectors: {
+          //         target: '[data-ref~="mixitup-target"]'
+          //     }
+          // });
 
-          $(".container").mixItUp();
+          // Declare variables
+          var input, filter, ul, element, p, i;
+          input = document.getElementById('myInput');
+          filter = input.value.toUpperCase();
+          elementList = document.getElementById("elementList");
+          element = elementList.getElementsByClassName("mix");
+          // li = ul.getElementsByTagName('li');
 
-          var inputText;
-          var $matching = $();
-
-          // Delay function
-          var delay = (function(){
-            var timer = 0;
-            return function(callback, ms){
-              clearTimeout (timer);
-              timer = setTimeout(callback, ms);
-            };
-          })();
-
-          $("#input").keyup(function(){
-            // Delay function invoked to make sure user stopped typing
-            delay(function(){
-              inputText = $("#input").val().toLowerCase();
-
-              // Check to see if input field is empty
-              if ((inputText.length) > 0) {
-                $( '.mix').each(function() {
-                  $this = $("this");
-
-                   // add item to be filtered out if input text matches items inside the title
-                   if($(this).children('.title').text().toLowerCase().match(inputText)) {
-                    $matching = $matching.add(this);
-                  }
-                  else {
-                    // removes any previously matched item
-                    $matching = $matching.not(this);
-                  }
-                });
-                $(".container").mixItUp('filter', $matching);
+          // Loop through all list items, and hide those who don't match the search query
+          for (i = 0; i < element.length; i++) {
+              p = element[i].getElementsByTagName("p")[0];
+              // element[i].style.float = "left";
+              if (p.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                  element[i].style.display = "";
+              } else {
+                  element[i].style.display = "none";
               }
 
-              else {
-                // resets the filter to show all item if input is empty
-                $(".container").mixItUp('filter', 'all');
-              }
-            }, 200 );
-          });
-        })</script>
+          }
+
+        }
+        </script>
+
+
 
 
     </body>
