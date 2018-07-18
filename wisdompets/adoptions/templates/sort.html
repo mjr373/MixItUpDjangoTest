@@ -313,12 +313,12 @@
           <div id="elementList">
             {% for pet in pets %}
               <div class="mix {{pet.species}}" data-petname="{{pet.name}}" data-petage="{{pet.age}}">
-                <h3><p>{{pet.name}}</p></h3>
-                <!-- <p>{{pet.species}}</p> -->
-              {%comment%}  {% if pet.breed %}
-                  <!-- <p>Breed: {{pet.breed}}</p>
-                  <p>{{pet.age}}</p> -->
-                {% endif %}{%endcomment%}
+                <h3><div class = "searchCategroy">{{pet.name}}</div></h3>
+                <p>{{pet.species}}</p>
+                {% if pet.breed %}
+                  <p>Breed: {{pet.breed}}</p>
+                  <p>{{pet.age}}</p>
+                {% endif %}
               </div>
             {% endfor%}
           </div>
@@ -358,7 +358,7 @@
           // });
 
           // Declare variables
-          var input, filter, ul, element, p, i;
+          var input, filter, elementList, element, searchCategroy, i;
           input = document.getElementById('myInput');
           filter = input.value.toUpperCase();
           elementList = document.getElementById("elementList");
@@ -367,9 +367,9 @@
 
           // Loop through all list items, and hide those who don't match the search query
           for (i = 0; i < element.length; i++) {
-              p = element[i].getElementsByTagName("p")[0];
+              searchCategroy = element[i].getElementsByClassName("searchCategroy")[0];
               // element[i].style.float = "left";
-              if (p.innerHTML.toUpperCase().indexOf(filter) > -1) {
+              if (searchCategroy.innerHTML.toUpperCase().indexOf(filter) > -1) {
                   element[i].style.display = "";
               } else {
                   element[i].style.display = "none";
